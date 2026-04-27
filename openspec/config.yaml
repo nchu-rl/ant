@@ -1,0 +1,79 @@
+schema: spec-driven
+
+context: |
+  Product: 基於強化學習 (RL) 之四足機器人複雜地形導航研究 — 在 MuJoCo Ant-v4 模擬環境中，
+    使用 PPO / SAC 訓練四足機器人在不平整地形上學會自適應步態的學術專題（第七組）。
+    範圍限定模擬環境的演算法驗證；實機部署、最後一哩物流與災難救援列為應用情境
+    與未來潛力，非本研究實作目標。
+
+  Users:
+    - 主要：研究團隊（第七組），負責訓練、評估、迭代演算法
+    - 次要：後續引用本研究以發展物流（最後一哩路）或災難搜救應用的研究者 / 開發者
+
+  Domain terms:
+    # RL / 演算法
+    - 強化學習 (Reinforcement Learning, RL)：透過 state-action-reward 循環自我試錯學習
+    - PPO (Proximal Policy Optimization)：本研究主演算法，於高維連續動作空間下收斂穩定，避免步幅過大導致崩潰
+    - SAC (Soft Actor-Critic)：與 PPO 對照的 off-policy 演算法，作為效能比較基準
+    - Actor-Critic：策略 (Actor) 與價值 (Critic) 的雙網路架構
+    - MLP (Multi-Layer Perceptron, 多層感知器)：策略網路採用的神經網路結構
+    - MDP (Markov Decision Process, 馬可夫決策過程)：本問題的形式化建模
+    - 獎勵函數 (Reward function)：四項加權總和
+        - r_forward (前進獎勵)：沿 X 軸位移獎勵
+        - r_healthy (生存回饋)：軀幹高度維持在設定值內、未翻覆即得分
+        - c_ctrl (控制成本)：懲罰過大扭力輸出，優化能量效率
+        - c_contact (碰撞成本)：懲罰軀幹與地面接觸，迫使機器人以四腿支撐
+    - 啟發式控制 (Heuristic Control)：傳統手寫數學模型的控制方法，本研究捨棄
+    - 領域隨機化 (Domain Randomization)：訓練中隨機化環境參數（質量、摩擦、地形），提升泛化能力，縮小 sim-to-real 落差
+    - 虛實遷移 (Sim-to-real transfer)：模擬策略遷移至現實的課題（本研究列為背景理論，非核心目標）
+
+    # 機器人 / 環境
+    - MuJoCo：物理模擬引擎
+    - Gymnasium：RL 環境框架（MuJoCo 平台基於此）
+    - Ant-v4：本研究使用的四足機器人模型；8 DoF，4 腿，每腿含 hip 與 ankle 兩個受控關節
+    - DoF (Degree of Freedom, 自由度)
+    - Hip (髖部關節) / Ankle (踝部關節)
+    - 狀態空間 (State Space)：27 維向量（軀幹高度、角度、8 個關節的角度與速度、軀幹質心速度）
+    - 動作空間 (Action Space)：8 維連續向量 ∈ [-1, 1]，對應 8 個馬達相對扭力
+    - 步態 (Gait) / 步態規劃 (Gait planning)
+    - 軀幹 (Torso) / 質心 (Center of mass) / 扭力 (Torque)
+
+    # 地形 / 評估
+    - 複雜地形 / 不平整地形 (Complex / Uneven terrain)：透過 MuJoCo heightfield 隨機生成的測試地形（高度、坡度、粗糙度可參數化）
+    - 強健性 (Robustness)：模型在未見地形上的泛化能力，避免「背下步態」
+    - 評估指標 (Evaluation metrics)：episode return、平均 X 軸位移、生存時長、翻覆率、控制成本 (能量消耗)；於多組未見地形 (held-out terrain) 上計算泛化表現
+
+    # 應用情境
+    - 最後一哩路 (Last-mile delivery)：物流配送終端痛點
+    - 險境救援 (Search and Rescue)：地震、水災、風災等高危場景
+
+  Constraints:
+    - 模擬平台：MuJoCo + Gymnasium，環境固定為 Ant-v4
+    - 機器人模型：8 DoF 對稱四足結構（4 腿 × 2 關節），不變更幾何
+    - 學習演算法：PPO（主）與 SAC（對照），策略採 Actor-Critic + MLP
+    - 控制型態：連續動作空間，非離散 on/off
+    - 研究範圍：停留於模擬環境；實機部署與 sim-to-real 為背景參考，非實作目標
+    - 文件語系：proposal、commit message、註解與文件以繁體中文為主；程式碼識別字、檔名使用英文
+    - 認證方式：學術研究專題，無 web/API 認證需求
+
+  Tech stack:
+    # 以下為 RL on MuJoCo 研究專題的常見組合，作為預設值，實際可調整
+    - 程式語言：Python 3.10+
+    - RL 框架：Stable-Baselines3（提供 PPO、SAC 實作）+ Gymnasium
+    - 物理引擎：MuJoCo（透過 mujoco Python binding 與 gymnasium[mujoco]）
+    - 深度學習後端：PyTorch（Stable-Baselines3 預設）
+    - 數值運算：NumPy（必要時加 Pandas 整理實驗結果）
+    - 實驗追蹤：TensorBoard（SB3 內建）；視需要加 Weights & Biases
+    - 環境管理：Python venv 或 conda
+    - 訓練硬體：本機 / 實驗室 GPU（CUDA），CPU 亦可但訓練時間顯著增加
+    - 版本控制：Git；commit 採 conventional commits
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
