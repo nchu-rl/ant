@@ -26,7 +26,7 @@
 
 足式機器人能透過步態規劃跨越不規則障礙、在高坡度地形維持平衡，是克服上述痛點的解方。傳統靜態控制（heuristic control）難以應對隨機地形，本研究改採深度強化學習，讓機器人在 MuJoCo 模擬環境中透過自我試錯學會適應性步態。
 
-詳細動機與痛點數據請見 [`docs/proposal_transcript.txt`](docs/proposal_transcript.txt) 第二、三頁，或觀看 [`docs/proposal.mp4`](docs/proposal.mp4)。
+詳細動機與痛點數據請見 [`docs/proposal_transcript.txt`](docs/proposal_transcript.txt) 第二、三頁，或觀看簡報影片：[YouTube（含字幕，建議）](https://www.youtube.com/watch?v=-L-PdxACWDI) / [`docs/proposal.mp4`](docs/proposal.mp4)（無字幕版）。
 
 ## 技術概覽
 
@@ -142,6 +142,9 @@ ant/
 
 ### `proposal.mp4` — 提案簡報影片
 - **內容**：第七組對 11 頁簡報內容的口頭報告錄影。
+- **兩種版本**：
+  - **[YouTube（含字幕，建議）](https://www.youtube.com/watch?v=-L-PdxACWDI)** — 有字幕，較容易跟上口頭內容，優先選此版本。
+  - **[`docs/proposal.mp4`](docs/proposal.mp4)** — 本地離線版，無字幕；僅在無法使用 YouTube 時觀看。
 - **適合誰**：第一次接觸本專案、想快速建立整體印象的讀者。
 - **何時看**：理解研究動機、技術主軸、預期貢獻最直觀的入口。
 - **限制**：影片不便檢索；如需引用具體段落請改看逐字稿。
@@ -167,7 +170,7 @@ ant/
 
 | 想知道… | 看這個 |
 |---|---|
-| 整個專題在做什麼（10 分鐘版） | `proposal.mp4` |
+| 整個專題在做什麼（10 分鐘版） | [YouTube（含字幕）](https://www.youtube.com/watch?v=-L-PdxACWDI) 或 `docs/proposal.mp4`（無字幕） |
 | 一句話可引用的研究動機、痛點數據、技術選型理由 | `proposal_transcript.txt` |
 | 簡報架構、流程圖、規格表 | `proposal.pdf` |
 | 修改 / 衍生簡報 | `proposal.pptx` |
